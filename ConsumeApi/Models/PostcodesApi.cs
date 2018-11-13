@@ -11,18 +11,24 @@ namespace ConsumeApi.Models
     public class PostcodesApi
     {
         private string baseUrl = "https://postcodes.io/";
-        
-        public string GetParliamentaryConstituency(string postcode)
+
+        public JObject GetPostcodeData(string postcode)
         {
             string extention = $"/postcodes/{postcode}";
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(baseUrl);
             var response = client.GetAsync(extention).Result;
-            string result = response.Content.ReadAsStringAsync().Result;
-            var jobject = JsonConvert.DeserializeObject<JObject>(result);
-            return jobject["result"]["parliamentary_constituency"].ToString();
-
+            return JsonConvert.DeserializeObject<JObject>(response.Content.ReadAsStringAsync().Result);
         }
 
+        public string GetParliamentaryConstituency(string postcode)
+        {
+            return GetPostcodeData(postcode)["result"]["parliamentary_constituency"].ToString();
+        }
+
+        public string GetClinicalCommissioningGroup(string postcode)
+        {
+            return GetPostcodeData(postcode)["result"]["ccg"].ToString();
+        }
     }
 }
