@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsumeApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,23 +9,17 @@ namespace ConsumeApi.Controllers
 {
     public class HomeController : Controller
     {
+        private PostcodesApi _postcodesApi;
+
+        public HomeController(PostcodesApi postcodesApi)
+        {
+            _postcodesApi = postcodesApi;
+        }
         public ActionResult Index()
-        {
+        {        
+            ViewData["constituency"] = _postcodesApi.GetParliamentaryConstituency("ne46ap");
             return View();
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }
